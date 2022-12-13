@@ -319,5 +319,10 @@ namespace Snake
                 y = m_next.y;
             }
         }
+
+        public class teleport : PositionedEntity
+        {
+            PositionedEntity
+        }
     }
 }
