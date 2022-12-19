@@ -32,6 +32,8 @@ namespace Snake
         int score;
         //таймер по которому 
         DispatcherTimer moveTimer;
+        int Modificator = 1;
+        DateTime Modificator_Start;
         
         //конструктор формы, выполняется при запуске программы
         public MainWindow()
@@ -102,13 +104,36 @@ namespace Snake
             if (head.x == apple.x && head.y == apple.y)
             {
                 //увеличиваем счет
-                score++;
+                score += 1*Modificator;
                 //двигаем яблоко на новое место
                 apple.move();
                 // добавляем новый сегмент к змее
                 var part = new BodyPart(snake.Last());
                 canvas1.Children.Add(part.image);
                 snake.Add(part);
+                if (Modificator < 4)
+                {
+                    Modificator++;
+                }
+                Modificator_Start = DateTime.Now;
+            }
+
+            if(Modificator!=1)
+            {
+                Modificator_Label.Content = String.Format("X{0}", Modificator);
+                Modificator_Label.Visibility = Visibility.Visible;
+                Modificator_Timer.Visibility = Visibility.Visible;
+                Modificator_Timer.Value = 10 - (DateTime.Now - Modificator_Start).Seconds;
+                if (Modificator_Timer.Value == 0)
+                {
+                    Modificator--;
+                    Modificator_Start = DateTime.Now;
+                }
+            }
+            else
+            {
+                Modificator_Label.Visibility = Visibility.Hidden;
+                Modificator_Timer.Visibility = Visibility.Hidden;
             }
             //перерисовываем экран
             UpdateField();
@@ -319,5 +344,7 @@ namespace Snake
                 y = m_next.y;
             }
         }
+
+        
     }
 }
